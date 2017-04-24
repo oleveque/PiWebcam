@@ -1,0 +1,145 @@
+<html>
+<!--
+	ENS Paris-Saclay - 21 Mars 2017
+	By Rémi Armand & Olivier Lévêque
+-->
+
+<head>
+	<meta charset="utf-8"/>
+	<link rel="icon" type="image/ico" href="favicon.ico"> 
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+	<style>
+		.rogneur {
+		    height: 480px;
+		    width: 640px;
+		    text-align: center; /* On centre l'image dans le div */
+		    overflow: hidden; /* Cache les choses qui dépassent du div */
+		    max-height:50%;
+			margin: 0px auto;
+			height: 50%;
+		}
+		
+		img {
+		    height: 480px;
+		    width: auto;
+		}
+
+		button {
+		    height: 100%;
+		    width: 100%;
+		}
+
+		i {
+		    font-size: 10em;
+		}
+
+		#exec {
+			display: none;
+		}
+
+		table {
+			height: 50%;
+			top: 50%;
+			position:absolute;
+		}
+
+		td,th,tr,table {
+			border:0;
+		}
+
+			th {
+				height: 33%;
+			}
+
+		a {
+			display:block;
+			height: 100%;
+		}
+	</style>
+
+	<script>
+		function zoomIn() {
+			zoom(50)
+		}
+
+		function zoomOut() {
+			zoom(-50)
+		}
+
+		function zoom(v) {
+			img = document.getElementById("image")
+			h = parseInt(img.style.height, 10) + v 
+			if((h  < 10000) && (h  > 480)) {
+				img.style.height = h + "px"
+				img.style.marginLeft = parseInt(img.style.marginLeft, 10) - v/2 + "px"
+				img.style.marginTop = parseInt(img.style.marginTop, 10) - v/2 + "px"
+			}
+		}
+
+		function reset() {
+			img = document.getElementById("image")
+			img.style.height = "480px"
+			img.style.marginLeft = "0px"
+			img.style.marginTop = "0px"
+			document.getElementById('exec').src = 'reset.cgi' ;
+		}
+
+		function action(a) {
+			file = '';
+			switch(a){
+				case 0:
+					file = 'up.cgi';
+					break;
+				case 1:
+					file = 'left.cgi';
+					break;
+				case 2:
+					file = 'right.cgi';
+					break;
+				case 3:
+					file = 'down.cgi';
+					break;
+				case 4:
+					file = 'rotation-gauche.cgi';
+					break;
+				case 5:
+					file = 'rotation-droite.cgi';
+					break;
+				default:
+					file = 'stop.cgi';
+					break;
+			}
+			document.getElementById('exec').src = file ;
+		 }
+	</script>
+	<title>PiWebcam</title>
+</head>
+
+<body bgcolor="lightblue" onload='reset();'>
+
+	<div class="rogneur">
+		<img id="image" src="http://192.168.3.1:8001/?action=stream">
+	</div>
+	</br>
+	
+	<table border="1" cellspacing="0" cellpadding="0" style="width: 100%" border="0">
+		<tr>
+			<td><a ontouchstart="action(4);" ontouchend="action(-1)" onmousedown="action(4);" onmouseup="action(-1)"><button><i class="fa fa-repeat fa-5x" aria-hidden="true"></i></button></a></td>				
+			<td><a ontouchstart="action(0);" ontouchend="action(-1)"  onmousedown="action(0);" onmouseup="action(-1)"><button><i class="fa fa-arrow-up fa-5x" aria-hidden="true"></i></button></a></td>
+			<td><a ontouchstart="action(5);" ontouchend="action(-1)"  onmousedown="action(5);" onmouseup="action(-1)"><button><i class="fa fa-undo fa-5x" aria-hidden="true"></i></button></a></td>
+		</tr>
+		<tr>
+			<td><a ontouchstart="action(1);" ontouchend="action(-1)"  onmousedown="action(1);" onmouseup="action(-1)"><button><i class="fa fa-arrow-left fa-5x" aria-hidden="true"></i></button></a></td>
+			<td><a ontouchstart="action(3);" ontouchend="action(-1)"  onmousedown="action(3);" onmouseup="action(-1)"><button><i class="fa fa-arrow-down fa-5x" aria-hidden="true"></i></button></a></td>
+			<td><a ontouchstart="action(2);" ontouchend="action(-1)"  onmousedown="action(2);" onmouseup="action(-1)"><button><i class="fa fa-arrow-right fa-5x" aria-hidden="true"></i></button></a></td>
+		</tr>
+		<tr>
+			<td><button onclick="zoomIn();"><i class="fa fa-search-plus fa-5x" aria-hidden="true"></i></button></td>
+			<td><button onclick="reset();"><i class="fa fa-retweet fa-5x" aria-hidden="true"></i></button></td>
+			<td><button onclick="zoomOut();"><i class="fa fa-search-minus fa-5x " aria-hidden="true"></i></button></td>
+		</tr>
+	</table>
+	<iframe id="exec" src="stop.cgi" /> 
+</body>
+</html>
