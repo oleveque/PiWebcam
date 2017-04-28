@@ -24,6 +24,8 @@ char lastByte;
 void setup() {
   Serial.begin(9600);
   Serial.setTimeout(50);
+
+  pinMode(#HWB, INPUT);
   
   roulis.attach(10);
   roulis.writeMicroseconds(MIDDLE_ROULIS);
@@ -36,6 +38,8 @@ void setup() {
 }
 
 void loop() {
+    if (!digitalRead(#HWB)) Serial.println('B');
+    
     char firstByte = (char)Serial.read();
     
     if (firstByte == '#') {
