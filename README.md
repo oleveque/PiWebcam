@@ -1,13 +1,73 @@
 # PiWebcam
-Ce projet, proposé en M2 FeSUPGE à l'école normale supérieure Paris-Saclay, a pour objectif de réaliser un système permettant de commander l’orientation d’une webcam à partir d’un serveur web embarqué. Il est réaliser à partir d'une RaspberryPi3 et d'un AVR-T32U4 (similaire à une Arduino Leonardo)
+Ce projet, proposé en M2 FeSUP GE à l'école normale supérieure Paris-Saclay, a pour objectif de réaliser un système permettant de commander l’orientation d’une webcam à partir d’un serveur web embarqué. Il est réaliser à partir d'une RaspberryPi3 et d'un AVR-T32U4 (similaire à une Arduino Leonardo)
 
 
 Nous décrirons dans ce manuel le fonctionnement Hardware du système, l'utilisation des différents bouts de code et nous détailleront l'installation et la configuration de la Raspberry Pi.
 
-## Hardware
+Le plan adopté sera la suivant :
+1. Description globale du système ;
+2. Configuration du Microcontrôleur ;
+3. Configuration de l'ensemble du système Linux sur RaspberryPi3.
+
+## Description globale du système
+Le système PiWebcam répond à la problématique suivante.
+> Piloter une webcam à distance en commandant sa direction et son zoom à l’aide d’un serveur embarqué.
+
+La partie matériel, nommé *Cadan 3 axes* et permettant l'orientation de la caméra, est issue dans projet ultérieur. Seul l'étage d'alimentation a été révisé et une RaspberryPi3 + PiCamera ajoutées.
+
+![](Ressources/block_diagram.png)
+
+### Cadan 3 axes
+Cette partie est composée de 2 servomoteurs commandés en position assurant la rotation de la caméra autour du roulis et du tangage, et d'un servomoteur modifié assurant la rotation de la caméra autour du lacet. La butée mécanique ayant été retirée et le potentiomètre de recopie ayant été remplacé par un pont diviseur de tension, ce servomoteur est alors commandé en vitesse et permet une rotation totale de la caméra autour du lacet.
+
+AJOUT PHOTO
+
+Le schéma suivant décrit sommairement le système.
+
+AJOUT PHOTO
+
+L’étage d'alimentation est situé dans la botte du système et est assuré par 2 alimentations à découpage (*LM2596* et *MP2307*) délivrant (respectivement) 5V et 7V. Le dossier `EAGLE` étant disponible dans l'archive du projet.
+* Les 5V permettent l’alimentation du servomoteur inférieure assurant la rotation autour du lacet
+* Les 7V permettent l’alimentation des servomoteurs restants, du microcontrôleur, et de la Raspberry. Deux régulateurs linéaires (*L7805CV* et ??) permettent de fournir les 3.3V au microcontrôleur et une 3e alimentation à découpage (*MP2307*) permet de fournir 5V à la Raspberry.
+
+Le schéma suivant illustre l'alimentation du système.
+
+![](Ressources/alimentation.png)
+
+La carte de développement utilisé est une *AVR-T32U4* dont l'architecture est inspiré d’un *Arduino Leonardo*. Elle peut être être programmée à partir de l’*IDE Arduino*.
+Le rôle du microcontrôleur est d'assuré le pilotage des 3 servomoteurs.
+
+![](Ressources/pinout.png)
+
+La communication entre la Raspberry Pi et le microcontrôleur est assuré par différent type de liaison (I2C, SPI, UART). La liaison Série UART à travers le câble USB a été retenu pour 2 raisons principales : sa facilité de mise en oeuvre et la possibilité de flasher l'*AVR-T32U4* à distance via une connection *ssh*.
+
+### RaspberryPi3 + PiCamera
+A COMPLETER
+
+## Configuration du Microcontrôleur
+Pour configurer le microcontroleur AVR-T32U4, il est nécessaire de télécharger l'environnement [Arduino IDE](https://www.arduino.cc/en/Main/Software). Il ne vous restera plus qu'à flasher la carte (en choissisant *Arduino Leonardo*) avec le code *.ino* disponible dans le dossier `Arduino/sketch_mar28a`.
+
+Par défaut, ce code vous permettra de commander les servomoteurs via une communication unidirectionnelle Série UART du PC vers le port micro-USB de la carte à la vitesse de *9600 baud*.
+
+Les messages à envoyer sont répertoriés ci-dessous.
+
+| Octet | Signification |
+| - | - |
+| `#` | Retour à la position d'origine |
+| `@` | Stopper le mouvement et maintenir la position |
+| `U` | Rotation autour du tangage dans le sens positif |
+| `D` | Rotation autour du tangage dans le sens négatif |
+| `R` | Rotation autour du lacet dans le sens positif |
+| `L` | Rotation autour du lacet dans le sens positif |
+| `W` | Rotation autour du roulis dans le sens positif |
+| `V` | Rotation autour du roulis dans le sens négatif |
+
+Il est possible d'envoyer un ordre similtannément au 3 servomoteurs en envoyer l'octet `#` suivit respectivement des positions angulaires des servomoteurs roulis, tangage et de la vitesse angulaire du servomoteur lacet, séparé par un caractère quelconque.
+
+Par exemple : `#350/-260/40`
 
 ## Configuration de l'ensemble du système Linux sur RaspberryPi3
-1. Installation de RASBIAN (suivre [ce lien](https://www.raspberrypi.org/downloads/raspbian/)) ;
+1. Installation de Raspbian ;
 2. Configuration du point d’accès Wifi ;
 3. Configuration du streaming la vidéo pour une PiCamera ;
 4. Installation du serveur *nweb* modifié ;
@@ -16,12 +76,17 @@ Nous décrirons dans ce manuel le fonctionnement Hardware du système, l'utilisa
 
 Une fois configuré le serveur est accéssible à l'adresse `192.168.3.1:8081` sous réserve d'être connecté au réseau Wifi `PiWebcam`.
 
+### Installation de Raspbian
+Pour télécharger l'image, rendez-vous sur la [page officiel](https://www.raspberrypi.org/downloads/raspbian/).
+Suivez le [guide d'installation](https://www.raspberrypi.org/documentation/installation/installing-images/) si vous ne savez pas (ou plus) comment installer cette image sur une carte SD.
+
 ### Configuration du point d’accès Wifi
 La configuration du point d'accès Wifi est inspiré de [ce tutoriel](https://www.g33k-zone.org/post/2016/05/11/Configurer-le-Raspberry-Pi-en-point-d-acc%C3%A8s-Wifi)
 
+TEXTE DE REMI
 
 ### Configuration du streaming la vidéo pour une PiCamera
-Pour le streaming vidéo, nous utilisons le package *mjpg-streamer*.
+Pour le streaming vidéo, nous utilisons le package *mjpg-streamer*. [Pour plus d'informations...](https://doc.ubuntu-fr.org/mjpg-streamer)
 
 L'installation se fait à l'aide des commandes suivantes.
 ```
@@ -99,4 +164,4 @@ Les liens symboliques associés au fichier *lancementServeur* pour son démarrag
 ```
 sudo update-rc.d lancementServeur defaults
 ```
-Le lien symbolique créé dans `rc3.d` est *S02lancementserveur*. Nous pouvons renommer le lien en *S99lancementserveur* pour qu'il se lance en dernier.
+Le lien symbolique créé dans `rc3.d` est `S02lancementserveur`. Nous pouvons renommer le lien en `S99lancementserveur` pour qu'il se lance en dernier.
