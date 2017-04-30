@@ -20,13 +20,13 @@ La partie matériel, nommé *Cadan 3 axes* et permettant l'orientation de la cam
 ### Cadan 3 axes
 Ce sous-système est composé de 2 servomoteurs (TYPES??) commandés en position assurant la rotation de la caméra autour du roulis et du tangage, et d'un servomoteur (TYPE??) modifié assurant la rotation de la caméra autour du lacet. Ce dernier est commandé en en vitesse et permet une rotation totale de la caméra autour de son axe puisque sa butée mécanique a été retirée et son potentiomètre de recopie remplacé par un pont diviseur de tension.
 
-AJOUT PHOTO DES DIFFERENTS AXES ET LEUR NOM
+??AJOUT PHOTO DES DIFFERENTS AXES ET LEUR NOM
 
 Le schéma suivant décrit sommairement le système.
 
-AJOUT PHOTO AVEC LE NOM DES SOUS-SYSTEMES
+??AJOUT PHOTO AVEC LE NOM DES SOUS-SYSTEMES
 
-DESCRIPTION LIASON ELECTRIQUE ETAGE SUP ET INF
+??DESCRIPTION LIASON ELECTRIQUE ETAGE SUP ET INF
 
 L’étage d'alimentation est situé dans la botte du système et est assuré par 2 alimentations à découpage (*LM2596* et *MP2307*) délivrant (respectivement) 5V et 7V. Les fichers *EAGLE* de cet étage étant disponible dans l'archive du projet.
 * Les 5V permettent l’alimentation du servomoteur inférieure assurant la rotation autour du lacet ;
@@ -44,7 +44,18 @@ Le rôle du microcontrôleur est d'assurer le pilotage des 3 servomoteurs. Les d
 La communication entre la Raspberry et le microcontrôleur peut être assurée par différents types de liaison (I2C, SPI, UART). La liaison série UART à travers le câble USB a été retenue pour 2 raisons principales : sa facilité de mise en oeuvre et la possibilité de flasher l'*AVR-T32U4* à partir de la Raspberry.
 
 ### Raspberry Pi 3 + PiCamera
-A COMPLETER
+La *Raspberry Pi 3* hébergera le serveur à partir duquel l'utilisateur devra se connecter pour piloter le système et visualiser le flux vidéo de la *PiCamera v2.1* (cette caméra a une résolution de 8 mégapixels permettant la mise en oeuvre d'un zoom numérique).
+
+Le serveur diffusera une interface graphique dans lequel le flux vidéo sera streamé. Des boutons permettront de transmettre des ordres au différents servomoteurs via une liaison série entre la Raspberry et le microcontrôleur.
+
+Un screenshot de l'interface graphique vous est présenté ci-dessous.
+
+??CAPTURE D'ECRAN DE L'INTERFACE
+
+Afin de mieux visualiser les flux d'informations, le schéma ci-dessous illustre les flux principaux.
+
+??SCHEMA FLUX INFO
+
 
 ## Configuration du microcontrôleur *AVR-T32U4*
 Pour configurer le microcontrôleur *AVR-T32U4*, il est nécessaire de télécharger l'[IDE Arduino](https://www.arduino.cc/en/Main/Software). Il ne vous restera plus qu'à flasher la carte avec le code *.ino* disponible dans le dossier `Arduino/sketch_mar28a` (en choissisant le type de board : *Arduino Leonardo*).
