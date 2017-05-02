@@ -16,6 +16,7 @@ float RR = 0;
 float TT = 0;
 
 char lastByte;
+int16_t cmd;
 
 void setup() {
   Serial.begin(9600);
@@ -34,53 +35,54 @@ void loop() {
       R = Serial.parseInt();
       T = Serial.parseInt();
       L = Serial.parseInt();
-      //roulis.writeMicroseconds(MIDDLE_ROULIS - R);
-      //tanguage.writeMicroseconds(MIDDLE_TANGUAGE - T);
-      //lacet.writeMicroseconds(MIDDLE_LACET - L);
-
-      OCR1A = MICROS2PWM(MIDDLE_LACET - L);
-      OCR1B = MICROS2PWM(MIDDLE_ROULIS - R);
-      OCR1C = MICROS2PWM(MIDDLE_TANGUAGE - T);
+      
+      cmd = MIDDLE_LACET - L;
+      OCR1A = MICROS2PWM(cmd);
+      
+      cmd = MIDDLE_ROULIS - R;
+      OCR1B = MICROS2PWM(cmd);
+      
+      cmd = MIDDLE_TANGUAGE - T;
+      OCR1C = MICROS2PWM(cmd);
     }
     
     else if (firstByte == '@') {
       lastByte = '@';
-      //lacet.writeMicroseconds(MIDDLE_LACET);
       OCR1A = MICROS2PWM(MIDDLE_LACET);
     }
     else if (firstByte == 'U' || lastByte == 'U') {
       TT++;
       lastByte = 'U';
-      //tanguage.writeMicroseconds(MIDDLE_TANGUAGE - (int)round(TT*SPEED));
-      OCR1C = MICROS2PWM(MIDDLE_TANGUAGE - (int)round(TT*SPEED));
+      cmd = MIDDLE_TANGUAGE - (int)round(TT*SPEED);
+      OCR1C = MICROS2PWM(cmd);
     }
     else if (firstByte == 'D' || lastByte == 'D') {
       TT--;
       lastByte = 'D';
-      //tanguage.writeMicroseconds(MIDDLE_TANGUAGE - (int)round(TT*SPEED));
-      OCR1C = MICROS2PWM(2000);
+      cmd = MIDDLE_TANGUAGE - (int)round(TT*SPEED);
+      OCR1C = MICROS2PWM(cmd);
     }
     else if (firstByte == 'R') {
       lastByte = 'R';
-      //lacet.writeMicroseconds(MIDDLE_LACET + 1500*SPEED);
-      OCR1A = MICROS2PWM(MIDDLE_LACET + 1500*SPEED);
+      cmd = MIDDLE_LACET + 1500*SPEED;
+      OCR1A = MICROS2PWM(cmd);
     }
     else if (firstByte == 'L') {
       lastByte = 'L';
-      //lacet.writeMicroseconds(MIDDLE_LACET - 1500*SPEED);
-      OCR1A = MICROS2PWM(MIDDLE_LACET - 1500*SPEED);
+      cmd = MIDDLE_LACET - 1500*SPEED;
+      OCR1A = MICROS2PWM(cmd);
     }
     else if (firstByte == 'W' || lastByte == 'W') {
       RR++;
       lastByte = 'W';
-      //roulis.writeMicroseconds(MIDDLE_ROULIS - (int)round(RR*SPEED));
-      OCR1B = MICROS2PWM(MIDDLE_ROULIS - (int)round(RR*SPEED));
+      cmd = MIDDLE_ROULIS - (int)round(RR*SPEED);
+      OCR1B = MICROS2PWM(cmd);
     }
     else if (firstByte == 'V' || lastByte == 'V') {
       RR--;
       lastByte = 'V';
-      //roulis.writeMicroseconds(MIDDLE_ROULIS - (int)round(RR*SPEED));
-      OCR1B = MICROS2PWM(MIDDLE_ROULIS - (int)round(RR*SPEED));
+      cmd = MIDDLE_ROULIS - (int)round(RR*SPEED);
+      OCR1B = MICROS2PWM(cmd);
     }
     
     if (TT > MAX) TT = MAX;
