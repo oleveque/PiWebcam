@@ -1,6 +1,7 @@
 # PiWebcam
 Ce projet, proposé en M2 FeSUP GE à l'École Normale Supérieure Paris-Saclay, a pour objectif de réaliser un système permettant de commander l’orientation d’une webcam à partir d’un serveur web embarqué. Il se base sur l'utilisation d'une *Raspberry Pi 3* et d'un microcontrôleur *AVR-T32U4* (similaire à une *Arduino Leonardo*).
 
+![PiWebcam](Ressources/PiWebcam.jpg)
 
 Nous décrirons dans ce manuel le fonctionnement du système et nous détaillerons son installation et sa configuration.
 
@@ -18,19 +19,19 @@ La partie matériel, nommé *Cadan 3 axes* et permettant l'orientation de la cam
 ![Diagramme de définition de bloc](Ressources/block_diagram.png)
 
 ### Cadan 3 axes
-Ce sous-système est composé de 2 servomoteurs (TYPES??) commandés en position assurant la rotation de la caméra autour du roulis et du tangage, et d'un servomoteur (TYPE??) modifié assurant la rotation de la caméra autour du lacet. Ce dernier est commandé en en vitesse et permet une rotation totale de la caméra autour de son axe puisque sa butée mécanique a été retirée et son potentiomètre de recopie remplacé par un pont diviseur de tension.
+Ce sous-système est composé de 2 servomoteurs (*HS-5565MH*) commandés en position assurant la rotation de la caméra autour du roulis et du tangage, et d'un servomoteur (*HS-805BB*) modifié assurant la rotation de la caméra autour du lacet. Ce dernier est commandé en en vitesse et permet une rotation totale de la caméra autour de son axe puisque sa butée mécanique a été retirée et son potentiomètre de recopie remplacé par un pont diviseur de tension.
 
-??AJOUT PHOTO DES DIFFERENTS AXES ET LEUR NOM
+![axes](Ressources/axes.png)
 
 Le schéma suivant décrit sommairement le système.
 
-??AJOUT PHOTO AVEC LE NOM DES SOUS-SYSTEMES
+![axes](Ressources/sous-systeme.png)
 
-??DESCRIPTION LIASON ELECTRIQUE ETAGE SUP ET INF
+La liaison électrique entre l'étage supérieur et inférieur est assuré par des contacts glissants.
 
 L’étage d'alimentation est situé dans la botte du système et est assuré par 2 alimentations à découpage (*LM2596* et *MP2307*) délivrant (respectivement) 5V et 7V. Les fichers *EAGLE* de cet étage étant disponible dans l'archive du projet.
 * Les 5V permettent l’alimentation du servomoteur inférieure assurant la rotation autour du lacet ;
-* Les 7V permettent l’alimentation des servomoteurs restants, du microcontrôleur, et de la Raspberry. Deux régulateurs linéaires (*L7805CV* et TYPE??) permettent de fournir les 3.3V nécessaire au microcontrôleur et une 3ième alimentation à découpage (*MP2307*) permet de fournir 5V à la Raspberry.
+* Les 7V permettent l’alimentation des servomoteurs restants, du microcontrôleur, et de la Raspberry. Deux régulateurs linéaires (*L7805CV* et *79ABN05A*) permettent de fournir les 3.3V nécessaire au microcontrôleur et une 3ième alimentation à découpage (*MP2307*) permet de fournir 5V à la Raspberry. Sur cette dernière alimentation, une capacité de 2200uF a été ajoutée en entrée pour palier à d'éventuellement chute de tension que imposer les servomoteurs.
 
 Le schéma suivant illustre la répartion de l'alimentation au sein du système.
 
