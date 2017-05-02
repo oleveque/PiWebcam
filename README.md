@@ -2,7 +2,7 @@
 Ce projet, proposé en M2 FeSUP GE à l'École Normale Supérieure Paris-Saclay, a pour objectif de réaliser un système permettant de commander l’orientation d’une webcam à partir d’un serveur web embarqué. Il se base sur l'utilisation d'une *Raspberry Pi 3* et d'un microcontrôleur *AVR-T32U4* (similaire à une *Arduino Leonardo*).
 
 Ce système, nommé *PiWebcam*, vous est présenté en image ci-dessous.
-![PiWebcam](Ressources/PiWebcam.jpg)
+![PiWebcam](Ressources/Images/PiWebcam.jpg)
 
 Nous décrirons dans ce manuel son fonctionnement et nous détaillerons son installation et sa configuration.
 
@@ -17,16 +17,16 @@ Le système PiWebcam répond à la problématique suivante.
 
 La partie matériel, nommé *Cadan 3 axes* et permettant l'orientation de la caméra, est issue dans projet ultérieur. Seul l'étage d'alimentation a été révisé et une *Raspberry Pi 3* + *PiCamera v2.1* ajoutées. Le diagramme de définition de bloc suivant permet de décomposer le système *PiWebcam* en différents sous-systèmes que nous décrirons dans ce document.
 
-![Diagramme de définition de bloc](Ressources/block_diagram.png)
+![Diagramme de définition de bloc](Ressources/Images/block_diagram.png)
 
 ### Cadan 3 axes
-Ce sous-système est composé de 2 servomoteurs (*HS-5565MH*) commandés en position assurant la rotation de la caméra autour du roulis et du tangage, et d'un servomoteur (*HS-805BB*) modifié assurant la rotation de la caméra autour du lacet. Ce dernier est commandé en en vitesse et permet une rotation totale de la caméra autour de son axe puisque sa butée mécanique a été retirée et son potentiomètre de recopie remplacé par un pont diviseur de tension.
+Ce sous-système est composé de 2 servomoteurs ([*HS-5565MH*](Ressources/Datasheets/hs5565.pdf)) commandés en position assurant la rotation de la caméra autour du roulis et du tangage, et d'un servomoteur ([*HS-805BB*](Ressources/Datasheets/hs805.pdf)) modifié assurant la rotation de la caméra autour du lacet. Ce dernier est commandé en en vitesse et permet une rotation totale de la caméra autour de son axe puisque sa butée mécanique a été retirée et son potentiomètre de recopie remplacé par un pont diviseur de tension.
 
-![axes](Ressources/axes.png)
+![axes](Ressources/Images/axes.png)
 
 Le schéma suivant décrit sommairement le système.
 
-![axes](Ressources/sous-systeme.png)
+![axes](Ressources/Images/sous-systeme.png)
 
 La liaison électrique entre l'étage supérieur et inférieur est assuré par des contacts glissants, permettant une rotation complète de l'étage supérieur.
 
@@ -36,12 +36,12 @@ L’étage d'alimentation est situé dans la botte du système (étage inférieu
 
 Le schéma suivant illustre la répartion de l'alimentation au sein du système.
 
-![Schéma d'alimentation](Ressources/alimentation.png)
+![Schéma d'alimentation](Ressources/Images/alimentation.png)
 
 La carte de développement utilisé est une *AVR-T32U4* dont l'architecture est inspiré d’une *Arduino Leonardo*. Elle peut être programmée à partir de l’*IDE Arduino*.
 Le rôle du microcontrôleur est d'assurer le pilotage des 3 servomoteurs. Les différents pins utilisés de la carte sont présentés sur le schéma suivant.
 
-![Pin mapping](Ressources/pinMapping.png)
+![Pin mapping](Ressources/Images/pinMapping.png)
 
 La communication entre la Raspberry et le microcontrôleur peut être assurée par différents types de liaison (I2C, SPI, UART). La liaison série UART à travers le câble USB a été retenue pour 2 raisons principales : sa facilité de mise en oeuvre et la possibilité de flasher l'*AVR-T32U4* à partir de la Raspberry.
 
@@ -52,11 +52,11 @@ Le serveur diffusera une interface graphique dans lequel le flux vidéo sera str
 
 Un screenshot de l'interface graphique vous est présenté ci-dessous.
 
-![User interface](Ressources/UserInterface.png)
+![User interface](Ressources/Images/UserInterface.png)
 
 Afin de mieux visualiser les flux d'informations circulant au sein de la Raspberry, le diagramme de bloc interne ci-dessous illustre les flux principaux.
 
-![Diagramme Interne](Ressources/fluxInfo.png)
+![Diagramme Interne](Ressources/Images/fluxInfo.png)
 
 
 ## Configuration du microcontrôleur *AVR-T32U4*
