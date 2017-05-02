@@ -1,9 +1,10 @@
 # PiWebcam
 Ce projet, proposé en M2 FeSUP GE à l'École Normale Supérieure Paris-Saclay, a pour objectif de réaliser un système permettant de commander l’orientation d’une webcam à partir d’un serveur web embarqué. Il se base sur l'utilisation d'une *Raspberry Pi 3* et d'un microcontrôleur *AVR-T32U4* (similaire à une *Arduino Leonardo*).
 
+Ce système, nommé *PiWebcam*, vous est présenté en image ci-dessous.
 ![PiWebcam](Ressources/PiWebcam.jpg)
 
-Nous décrirons dans ce manuel le fonctionnement du système et nous détaillerons son installation et sa configuration.
+Nous décrirons dans ce manuel son fonctionnement et nous détaillerons son installation et sa configuration.
 
 La chronologie adoptée sera la suivante :
 1. Description globale du système ;
@@ -27,10 +28,10 @@ Le schéma suivant décrit sommairement le système.
 
 ![axes](Ressources/sous-systeme.png)
 
-La liaison électrique entre l'étage supérieur et inférieur est assuré par des contacts glissants.
+La liaison électrique entre l'étage supérieur et inférieur est assuré par des contacts glissants, permettant une rotation complète de l'étage supérieur.
 
-L’étage d'alimentation est situé dans la botte du système et est assuré par 2 alimentations à découpage (*LM2596* et *MP2307*) délivrant (respectivement) 5V et 7V. Les fichers *EAGLE* de cet étage étant disponible dans l'archive du projet.
-* Les 5V permettent l’alimentation du servomoteur inférieure assurant la rotation autour du lacet ;
+L’étage d'alimentation est situé dans la botte du système (étage inférieur) et est assuré par 2 alimentations à découpage (*LM2596* et *MP2307*) délivrant (respectivement) 5V et 7V. Les fichers *EAGLE* de cet étage sont disponibles dans l'archive du projet.
+* Les 5V permettent l’alimentation du servomoteur inférieur assurant la rotation autour du lacet ;
 * Les 7V permettent l’alimentation des servomoteurs restants, du microcontrôleur, et de la Raspberry. Deux régulateurs linéaires (*L7805CV* et *79ABN05A*) permettent de fournir les 3.3V nécessaire au microcontrôleur et une 3ième alimentation à découpage (*MP2307*) permet de fournir 5V à la Raspberry. Sur cette dernière alimentation, une capacité de 2200uF a été ajoutée en entrée pour palier à d'éventuellement chute de tension que imposer les servomoteurs.
 
 Le schéma suivant illustre la répartion de l'alimentation au sein du système.
@@ -53,15 +54,18 @@ Un screenshot de l'interface graphique vous est présenté ci-dessous.
 
 ![User interface](Ressources/UserInterface.png)
 
-Afin de mieux visualiser les flux d'informations, le schéma ci-dessous illustre les flux principaux.
+Afin de mieux visualiser les flux d'informations circulant au sein de la Raspberry, le diagramme de bloc interne ci-dessous illustre les flux principaux.
 
-??SCHEMA FLUX INFO
+![Diagramme Interne](Ressources/fluxInfo.png)
 
 
 ## Configuration du microcontrôleur *AVR-T32U4*
-Pour configurer le microcontrôleur *AVR-T32U4*, il est nécessaire de télécharger l'[IDE Arduino](https://www.arduino.cc/en/Main/Software). Il ne vous restera plus qu'à flasher la carte avec le code *.ino* disponible dans le dossier `Arduino/sketch_mar28a` (en choissisant le type de board : *Arduino Leonardo*).
+Pour configurer le microcontrôleur *AVR-T32U4*, il est nécessaire de télécharger l'[IDE Arduino](https://www.arduino.cc/en/Main/Software). Il ne vous restera plus qu'à flasher la carte avec l'un des codes *.ino* disponiblent dans le dossier `Arduino/config` (en choissisant le type de board : *Arduino Leonardo*).
+Deux codes vous sont proposés :
+* `ArduinoPWM.ino` utilisant la blibliothèque *Servo* d'Arduino pour générer la PWM de commande des servomoteurs ;
+* `MyOwnPWM.ino` exploitant les capacités hardwares du microcontrôleur pour générer les PWM.
 
-Par défaut, ce code permet de commander les servomoteurs via une communication unidirectionnelle série UART vers le port série `Serial0` du microcontrôleur à la vitesse de *9600 baud*.
+Par défaut, ces codes permettent de commander les servomoteurs via une communication unidirectionnelle série UART vers le port série `Serial0` du microcontrôleur à la vitesse de *9600 baud*.
 
 Les messages à envoyer sont de simples octets répertoriés dans le tableau ci-dessous.
 
@@ -97,7 +101,7 @@ La configuration du point d'accès Wifi est inspiré de [ce tutoriel](https://ww
 
 Cette configuration est valable pour une *Raspberry Pi 3* disposant d'un module Wifi intégré. Il est cependant possible d'effectuer une configuration similaire sur un autre modèle à l'aide d'un dongle Wifi.
 
-**Remarque :** Pour effectuer cette configuration, il est nécessaire d'être directement connecté à la Raspberry avec un moniteur, un clavier + sourie, et une connection internet.
+**Remarque :** Pour effectuer cette configuration, il est nécessaire d'être directement connecté à la Raspberry avec un moniteur, un clavier + souris, et une connection internet.
 
 Commencez par installer les packages *dnsmasq* et *hostapd*.
 ```
@@ -125,7 +129,15 @@ Nous pouvons maintenant redémarrer le wifi à l'aide de la commande suivante.
 sudo service dhcpcd restart
 ```
 
-*hostapd* est le logiciel qui permet de gérer le point d'accès, il est donc le coeur de notre système. Sa configuration se fait dans le fichier `/etc/hostapd/hostapd.conf`
+*hostapd* est le logiciel qui permet de gérer le point d'accès, il est donc le coeur de notre système. Sa configuration se fait dans le fichier `/etc/hostapd/hostapd.conf` qu'il faut créer :
+
+```
+cd /etc/hostapd/
+sudo touch hostapd.conf
+sudo nano hostapd.conf
+```
+
+Et le remplir avec :
 ```
 # Nom de l'interface wifi (celle par défaut)
 interface=wlan0
@@ -171,7 +183,7 @@ Une fois que le point d'accès fonctionne, coupez le (*Ctrl+C*) et placez le en 
 ```
 
 *dnsmasq* est un petit serveur DNS qui intègre un serveur *DHCP*. Il permettra d'attribuer les adresses IP aux clients qui se connecteront sur le point d'accès.
-Sauvegardez son fichier de configuration initial (`/etc/dnsmasq.conf`) puis créez en une nouvelle version :
+Sauvegardez son fichier de configuration initial (`/etc/dnsmasq.conf`, qui n'est pas entierement commenté!) puis créez en une nouvelle version :
 ```
 # Interface à utiliser
 interface=wlan0
@@ -237,13 +249,14 @@ sudo apt-get install subversion
 L'installation de *mjpg-streamer* peut alors commencer.
 ```
 sudo apt-get install libjpeg62-dev
-svn checkout svn://svn.code.sf.net/p/mjpg-streamer/code/  mjpg-streamer
-cd
-make
+sudo apt-get install libjpeg-dev
+svn checkout svn://svn.code.sf.net/p/mjpg-streamer/code/  /mjpg-streamer
+cd /mjpg-streamer/mjpg-streamer
+sudo make
 sudo make install
 ```
 
-Pour pouvoir lancer le streaming vidéo, il faut charger le module `bcm2835-v4l2` à l'aide de la commande suivante à chaque démarrage de la Raspberry. Pour plus d'informations, consultez [ce lien](http://www.epingle.info/?p=3224).
+Pour pouvoir lancer le streaming vidéo, il faut charger le module `bcm2835-v4l2` à l'aide de la commande suivante à chaque démarrage de la Raspberry. La camera doit être branché au démarrage. Pour plus d'informations, consultez [ce lien](http://www.epingle.info/?p=3224).
 ```
 sudo modprobe bcm2835-v4l2
 ```
@@ -252,7 +265,7 @@ Pour éviter d’avoir à exécuter cette commande à chaque démarrage, il suff
 
 Le streaming vidéo se lance à l'aide de la commande suivante.
 ```
-mjpg_streamer -i “/usr/local/lib/input_uvc.so -d /dev/video0 -f 24 -r 320x180” -o “/usr/local/lib/output_http.so -n -w /usr/local/www -p 8001”
+mjpg_streamer -i "/usr/local/lib/input_uvc.so -d /dev/video0 -f 24 -r 320x180" -o "/usr/local/lib/output_http.so -n -w /usr/local/www -p 8001"
 ```
 La vérification de l'existence de `/dev/video0` permet de savoir sur le module s’est bien lancer au démarrage.
 
