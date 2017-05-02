@@ -6,8 +6,8 @@
 
 <head>
 	<meta charset="utf-8"/>
-	<link rel="icon" type="image/ico" href="favicon.ico"> 
-	<link rel="stylesheet" href="font-awesome.css">
+	<link rel="icon" type="image/ico" href="favicon.ico">
+	<link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
 	<title>PiWebcam</title>
 
 	<style>
@@ -20,7 +20,7 @@
 			margin: 0px auto;
 			height: 50%;
 		}
-		
+
 		img {
 		    height: 480px;
 		    width: auto;
@@ -78,7 +78,7 @@
 
 		function zoom(v) {
 			img = document.getElementById("image")
-			h = parseInt(img.style.height, 10) + v 
+			h = parseInt(img.style.height, 10) + v
 			if((h  < 10000) && (h  > 480)) {
 				img.style.height = h + "px"
 				img.style.marginLeft = parseInt(img.style.marginLeft, 10) - v/2 + "px"
@@ -137,10 +137,9 @@
 		<img id="image" src="http://192.168.3.1:8001/?action=stream">
 	</div>
 	</br>
-	
 	<table border="1" cellspacing="0" cellpadding="0" style="width: 100%" border="0">
 		<tr>
-			<td><a ontouchstart="action(4);" ontouchend="action(-1)" onmousedown="action(4);" onmouseup="action(-1)"><button><i class="fa fa-repeat fa-5x" aria-hidden="true"></i></button></a></td>				
+			<td><a ontouchstart="action(4);" ontouchend="action(-1)" onmousedown="action(4);" onmouseup="action(-1)"><button><i class="fa fa-repeat fa-5x" aria-hidden="true"></i></button></a></td>
 			<td><a ontouchstart="action(0);" ontouchend="action(-1)"  onmousedown="action(0);" onmouseup="action(-1)"><button><i class="fa fa-arrow-up fa-5x" aria-hidden="true"></i></button></a></td>
 			<td><a ontouchstart="action(5);" ontouchend="action(-1)"  onmousedown="action(5);" onmouseup="action(-1)"><button><i class="fa fa-undo fa-5x" aria-hidden="true"></i></button></a></td>
 		</tr>

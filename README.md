@@ -51,7 +51,7 @@ Le serveur diffusera une interface graphique dans lequel le flux vidéo sera str
 
 Un screenshot de l'interface graphique vous est présenté ci-dessous.
 
-??CAPTURE D'ECRAN DE L'INTERFACE
+![User interface](Ressources/UserInterface.png)
 
 Afin de mieux visualiser les flux d'informations, le schéma ci-dessous illustre les flux principaux.
 
