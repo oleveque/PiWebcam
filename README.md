@@ -1,4 +1,7 @@
 # PiWebcam
+* Rémi Armand, *remi.armand@ens-paris-saclay.fr*
+* Olivier Lévêque, *olivier.leveque@ens-paris-saclay.fr*
+
 Ce projet, proposé en M2 FeSUP GE à l'École Normale Supérieure Paris-Saclay, a pour objectif de réaliser un système permettant de commander l’orientation d’une webcam à partir d’un serveur web embarqué. Il se base sur l'utilisation d'une *Raspberry Pi 3* et d'un microcontrôleur *AVR-T32U4* (similaire à une *Arduino Leonardo*).
 
 Ce système, nommé *PiWebcam*, vous est présenté en image ci-dessous.
