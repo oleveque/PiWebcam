@@ -31,7 +31,7 @@ void setup() {
   tanguage.attach(11);
   tanguage.writeMicroseconds(MIDDLE_TANGUAGE);
 
-  lacet.attach(12);
+  lacet.attach(9);
   lacet.writeMicroseconds(MIDDLE_LACET);
 }
 
