@@ -66,7 +66,7 @@ Afin de mieux visualiser les flux d'informations circulant au sein de la Raspber
 Pour configurer le microcontrôleur *AVR-T32U4*, il est nécessaire de télécharger l'[IDE Arduino](https://www.arduino.cc/en/Main/Software). Il ne vous restera plus qu'à flasher la carte avec l'un des codes *.ino* disponiblent dans le dossier `Arduino/config` (en choissisant le type de board : *Arduino Leonardo*).
 Deux codes vous sont proposés :
 * `ArduinoPWM.ino` utilisant la blibliothèque *Servo* d'Arduino pour générer la PWM de commande des servomoteurs ;
-* `MyOwnPWM.ino` exploitant les capacités hardwares du microcontrôleur pour générer les PWM.
+* `MyOwnPWM.ino` exploitant les capacités hardwares du microcontrôleur pour générer les PWM. Pour mieux comprendre son fonctionnement, vous pouvez consulter [ce lien](http://r6500.blogspot.ca/2014/12/fast-pwm-on-arduino-leonardo.html) et/ou étudier le code `PWM.ino` dans le dossier `Arduino` qui permet de générer des signaux PWM sur les pins D9, D10, D11 du microcontrôleur.
 
 Par défaut, ces codes permettent de commander les servomoteurs via une communication unidirectionnelle série UART vers le port série `Serial0` du microcontrôleur à la vitesse de *9600 baud*.
 
