@@ -18,11 +18,11 @@ La chronologie adoptée sera la suivante :
 Le système PiWebcam répond à la problématique suivante.
 > Piloter une webcam à distance en commandant sa direction et son zoom à l’aide d’un serveur embarqué.
 
-La partie matériel, nommé *Cadan 3 axes* et permettant l'orientation de la caméra, est issue dans projet ultérieur. Seul l'étage d'alimentation a été révisé et une *Raspberry Pi 3* + *PiCamera v2.1* ajoutées. Le diagramme de définition de bloc suivant permet de décomposer le système *PiWebcam* en différents sous-systèmes que nous décrirons dans ce document.
+La partie matériel, nommé *Cardan 3 axes* et permettant l'orientation de la caméra, est issue dans projet ultérieur. Seul l'étage d'alimentation a été révisé et une *Raspberry Pi 3* + *PiCamera v2.1* ajoutées. Le diagramme de définition de bloc suivant permet de décomposer le système *PiWebcam* en différents sous-systèmes que nous décrirons dans ce document.
 
 ![Diagramme de définition de bloc](Ressources/Images/block_diagram.png)
 
-### Cadan 3 axes
+### Cardan 3 axes
 Ce sous-système est composé de 2 servomoteurs ([*HS-5565MH*](Ressources/Datasheets/hs5565.pdf)) commandés en position assurant la rotation de la caméra autour du roulis et du tangage, et d'un servomoteur ([*HS-805BB*](Ressources/Datasheets/hs805.pdf)) modifié assurant la rotation de la caméra autour du lacet. Ce dernier est commandé en en vitesse et permet une rotation totale de la caméra autour de son axe puisque sa butée mécanique a été retirée et son potentiomètre de recopie remplacé par un pont diviseur de tension.
 
 ![axes](Ressources/Images/axes.png)
