@@ -7,7 +7,6 @@
 <head>
 	<meta charset="utf-8"/>
 	<link rel="icon" type="image/ico" href="favicon.ico">
-	<link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
 	<title>PiWebcam</title>
 
 	<style>
@@ -22,7 +21,7 @@
 		}
 
 		img {
-		    height: 480px;
+		    height: 30%;
 		    width: auto;
 		}
 
@@ -38,6 +37,11 @@
 				height: auto;
 		    	width: auto;
 			}
+
+				button.menu img {
+					height: 5%;
+			    	width: auto;
+				}
 
 		i {
 		    font-size: 10em;
@@ -77,7 +81,7 @@
 		}
 
 		function zoom(v) {
-			img = document.getElementById("image")
+			img = document.getElementById("streaming")
 			h = parseInt(img.style.height, 10) + v
 			if((h  < 10000) && (h  > 480)) {
 				img.style.height = h + "px"
@@ -87,7 +91,7 @@
 		}
 
 		function reset() {
-			img = document.getElementById("image")
+			img = document.getElementById("streaming")
 			img.style.height = "480px"
 			img.style.marginLeft = "0px"
 			img.style.marginTop = "0px"
@@ -131,27 +135,28 @@
 </head>
 
 <body bgcolor="lightblue" onload='reset();'>
-	<button onclick="action(6)" class="menu"><i class="fa fa-times fa-3x" aria-hidden="true"></i></button>
+	<button onclick="action(6)" class="menu"><img src="power.png"></button>
 
 	<div class="rogneur">
-		<img id="image" src="http://192.168.3.1:8001/?action=stream">
+		<img id="streaming" src="http://192.168.3.1:8001/?action=stream">
 	</div>
 	</br>
 	<table border="1" cellspacing="0" cellpadding="0" style="width: 100%" border="0">
 		<tr>
-			<td><a ontouchstart="action(4);" ontouchend="action(-1)" onmousedown="action(4);" onmouseup="action(-1)"><button><i class="fa fa-repeat fa-5x" aria-hidden="true"></i></button></a></td>
-			<td><a ontouchstart="action(0);" ontouchend="action(-1)"  onmousedown="action(0);" onmouseup="action(-1)"><button><i class="fa fa-arrow-up fa-5x" aria-hidden="true"></i></button></a></td>
-			<td><a ontouchstart="action(5);" ontouchend="action(-1)"  onmousedown="action(5);" onmouseup="action(-1)"><button><i class="fa fa-undo fa-5x" aria-hidden="true"></i></button></a></td>
+			<td><a ontouchstart="action(4);" ontouchend="action(-1)" onmousedown="action(4);" onmouseup="action(-1)"><button><img src="right-roulis.png"></button></a></td>
+			<td><a ontouchstart="action(0);" ontouchend="action(-1)"  onmousedown="action(0);" onmouseup="action(-1)"><button><img src="up-arrow.png"></button></a></td>
+			<td><a ontouchstart="action(5);" ontouchend="action(-1)"  onmousedown="action(5);" onmouseup="action(-1)"><button><img src="left-roulis.png"></button></a></td>
 		</tr>
 		<tr>
-			<td><a ontouchstart="action(1);" ontouchend="action(-1)"  onmousedown="action(1);" onmouseup="action(-1)"><button><i class="fa fa-arrow-left fa-5x" aria-hidden="true"></i></button></a></td>
-			<td><a ontouchstart="action(3);" ontouchend="action(-1)"  onmousedown="action(3);" onmouseup="action(-1)"><button><i class="fa fa-arrow-down fa-5x" aria-hidden="true"></i></button></a></td>
-			<td><a ontouchstart="action(2);" ontouchend="action(-1)"  onmousedown="action(2);" onmouseup="action(-1)"><button><i class="fa fa-arrow-right fa-5x" aria-hidden="true"></i></button></a></td>
+			<td><a ontouchstart="action(1);" ontouchend="action(-1)"  onmousedown="action(1);" onmouseup="action(-1)"><button>
+			<img src="left-arrow.png"></button></a></td>
+			<td><a ontouchstart="action(3);" ontouchend="action(-1)"  onmousedown="action(3);" onmouseup="action(-1)"><button><img src="down-arrow.png"></button></a></td>
+			<td><a ontouchstart="action(2);" ontouchend="action(-1)"  onmousedown="action(2);" onmouseup="action(-1)"><button><img src="right-arrow.png"></button></a></td>
 		</tr>
 		<tr>
-			<td><button onclick="zoomIn();"><i class="fa fa-search-plus fa-5x" aria-hidden="true"></i></button></td>
-			<td><button onclick="reset();"><i class="fa fa-retweet fa-5x" aria-hidden="true"></i></button></td>
-			<td><button onclick="zoomOut();"><i class="fa fa-search-minus fa-5x " aria-hidden="true"></i></button></td>
+			<td><button onclick="zoomIn();"><img src="zoom-in.png"></button></td>
+			<td><button onclick="reset();"><img src="reload.png"></button></td>
+			<td><button onclick="zoomOut();"><img src="zoom-out.png"></button></td>
 		</tr>
 	</table>
 	<iframe id="exec" src="stop.cgi" />

@@ -284,7 +284,7 @@ chmod ugo+r /home/serveur
 Compilez ensuite le serveur *nweb* et rendez le executable.
 ```
 cc /home/nweb23.c -o /home/nweb
-chmod r+x /home/nweb
+chmod 777 /home/nweb
 ```
 Décidez ensuite du numéro du port que vous utiliserez (ici *8081*). Puis lancez *nweb* à l'aide de la commande suivante.
 ```
@@ -320,7 +320,7 @@ Déplacez le script shell dans le répertoire `/etc/init.d` qui contient les dif
 
 ```
 sudo mv /home/lancementServeur.sh /etc/init.d/lancementServeur
-sudo chmod r+x /etc/init.d/lancementServeur
+sudo chmod 777 /etc/init.d/lancementServeur
 ```
 
 Les liens symboliques associés au fichier `lancementServeur` pour son démarrage et son arrêt au lancement et à l'arrêt de la Raspberry sont générés à l'aide de la commande suivante.
