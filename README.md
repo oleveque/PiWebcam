@@ -16,14 +16,14 @@ La chronologie adoptée sera la suivante :
 
 ## Description globale du système
 Le système PiWebcam répond à la problématique suivante.
-> Piloter une webcam à distance en commandant sa direction et son zoom à l’aide d’un serveur embarqué.
+> Piloter une webcam à distance en commandant son orientation et son zoom à l’aide d’un serveur embarqué.
 
-La partie matériel, nommé *Cardan 3 axes* et permettant l'orientation de la caméra, est issue dans projet ultérieur. Seul l'étage d'alimentation a été révisé et une *Raspberry Pi 3* + *PiCamera v2.1* ajoutées. Le diagramme de définition de bloc suivant permet de décomposer le système *PiWebcam* en différents sous-systèmes que nous décrirons dans ce document.
+La partie matériel, nommé *Cardan 3 axes* et permettant l'orientation de la caméra, est issue d'un projet ultérieur. Seul l'étage d'alimentation a été révisé et une *Raspberry Pi 3* + *PiCamera v2.1* ajoutées. Le diagramme de définition de bloc suivant permet de décomposer le système *PiWebcam* en différents sous-systèmes que nous décrirons dans ce document.
 
 ![Diagramme de définition de bloc](Ressources/Images/block_diagram.png)
 
 ### Cardan 3 axes
-Ce sous-système est composé de 2 servomoteurs ([*HS-5565MH*](Ressources/Datasheets/hs5565.pdf)) commandés en position assurant la rotation de la caméra autour du roulis et du tangage, et d'un servomoteur ([*HS-805BB*](Ressources/Datasheets/hs805.pdf)) modifié assurant la rotation de la caméra autour du lacet. Ce dernier est commandé en en vitesse et permet une rotation totale de la caméra autour de son axe puisque sa butée mécanique a été retirée et son potentiomètre de recopie remplacé par un pont diviseur de tension.
+Ce sous-système est composé de 2 servomoteurs ([*HS-5565MH*](Ressources/Datasheets/hs5565.pdf)) commandés en position assurant la rotation de la caméra autour de l'axe de roulis et l'axe de tangage, et d'un servomoteur ([*HS-805BB*](Ressources/Datasheets/hs805.pdf)) modifié assurant la rotation de la caméra autour de l'axe de lacet. Ce dernier est commandé en vitesse et permet une rotation totale de la caméra autour de son axe puisque sa butée mécanique a été retirée et son potentiomètre de recopie remplacé par un pont diviseur de tension.
 
 ![axes](Ressources/Images/axes.png)
 
@@ -33,27 +33,29 @@ Le schéma suivant décrit sommairement le système.
 
 La liaison électrique entre l'étage supérieur et inférieur est assuré par des contacts glissants, permettant une rotation complète de l'étage supérieur.
 
-L’étage d'alimentation est situé dans la botte du système (étage inférieur) et est assuré par 2 alimentations à découpage (*LM2596* et *MP2307*) délivrant (respectivement) 5V et 7V. Les fichers *EAGLE* de cet étage sont disponibles dans l'archive du projet.
-* Les 5V permettent l’alimentation du servomoteur inférieur assurant la rotation autour du lacet ;
-* Les 7V permettent l’alimentation des servomoteurs restants, du microcontrôleur, et de la Raspberry. Deux régulateurs linéaires (*L7805CV* et *79ABN05A*) permettent de fournir les 3.3V nécessaire au microcontrôleur et une 3ième alimentation à découpage (*MP2307*) permet de fournir 5V à la Raspberry. Sur cette dernière alimentation, une capacité de 2200uF a été ajoutée en entrée pour palier à d'éventuellement chute de tension que imposer les servomoteurs.
+![contacts](Ressources/Images/liaison_vue2.jpg)
+
+L’étage d'alimentation est situé dans la botte du système (étage inférieur) et est assuré par 2 alimentations à découpage (*LM2596* et *MP2307*) délivrant (respectivement) 5V et 7V. Les fichiers *EAGLE* de cet étage sont disponibles dans l'archive du projet.
+* Les 5V permettent l’alimentation du servomoteur inférieur assurant la rotation autour de l'axe de lacet ;
+* Les 7V permettent l’alimentation des servomoteurs restants, du microcontrôleur, et de la Raspberry. Deux régulateurs linéaires (*L7805CV* et *79ABN05A*) permettent de fournir les 3.3V nécessaire au microcontrôleur et une 3ième alimentation à découpage (*MP2307*) permet de fournir 5V à la Raspberry. Sur cette dernière alimentation, une capacité de 2200uF a été ajoutée en entrée pour diminuer les chutes de tension lors des appels de courant des servomoteurs.
 
 Le schéma suivant illustre la répartion de l'alimentation au sein du système.
 
 ![Schéma d'alimentation](Ressources/Images/alimentation.png)
 
-La carte de développement utilisé est une *AVR-T32U4* dont l'architecture est inspiré d’une *Arduino Leonardo*. Elle peut être programmée à partir de l’*IDE Arduino*.
+La carte de développement utilisé est une *AVR-T32U4* dont l'architecture est inspirée d’une *Arduino Leonardo*. Elle peut être programmée à partir de l’*IDE Arduino*.
 Le rôle du microcontrôleur est d'assurer le pilotage des 3 servomoteurs. Les différents pins utilisés de la carte sont présentés sur le schéma suivant.
 
 ![Pin mapping](Ressources/Images/pinMapping.png)
 
-La communication entre la Raspberry et le microcontrôleur peut être assurée par différents types de liaison (I2C, SPI, UART). La liaison série à travers une connection USB a été retenue pour 2 raisons principales : sa facilité de mise en oeuvre et la possibilité de flasher l'*AVR-T32U4* à partir de la Raspberry.
+La communication entre la Raspberry et le microcontrôleur peut être assurée par différents types de liaison (I2C, SPI, UART). La liaison série à travers une connection USB a été retenue pour 2 raisons principales : sa facilité de mise en oeuvre et la possibilité de reprogrammer l'*AVR-T32U4* à partir de la Raspberry.
 
 ### Raspberry Pi 3 + PiCamera
 La *Raspberry Pi 3* hébergera le serveur à partir duquel l'utilisateur devra se connecter pour piloter le système et visualiser le flux vidéo de la *PiCamera v2.1* (cette caméra a une résolution de 8 mégapixels permettant la mise en oeuvre d'un zoom numérique).
 
 Le serveur diffusera une interface graphique dans lequel le flux vidéo sera streamé. Des boutons permettront de transmettre des ordres au différents servomoteurs via une liaison série entre la Raspberry et le microcontrôleur.
 
-Un screenshot de l'interface graphique vous est présenté ci-dessous.
+Un screenshot de cette interface vous est présenté ci-dessous.
 
 ![User interface](Ressources/Images/UserInterface.png)
 
@@ -63,10 +65,10 @@ Afin de mieux visualiser les flux d'informations circulant au sein de la Raspber
 
 
 ## Configuration du microcontrôleur *AVR-T32U4*
-Pour configurer le microcontrôleur *AVR-T32U4*, il est nécessaire de télécharger l'[IDE Arduino](https://www.arduino.cc/en/Main/Software). Il ne vous restera plus qu'à flasher la carte avec l'un des codes *.ino* disponiblent dans le dossier `Arduino/config` (en choissisant le type de board : *Arduino Leonardo*).
+Pour configurer le microcontrôleur *AVR-T32U4*, il est nécessaire de télécharger l'[IDE Arduino](https://www.arduino.cc/en/Main/Software). Il ne vous restera plus qu'à reprogrammer la carte avec l'un des codes *.ino* disponiblent dans le dossier `Arduino/config` (en choissisant le type de board : *Arduino Leonardo*).
 Deux codes vous sont proposés :
 * `ArduinoPWM.ino` utilisant la blibliothèque *Servo* d'Arduino pour générer la PWM de commande des servomoteurs ;
-* `MyOwnPWM.ino` exploitant les capacités hardwares du microcontrôleur pour générer les PWM. Pour mieux comprendre son fonctionnement, vous pouvez consulter [ce lien](http://r6500.blogspot.ca/2014/12/fast-pwm-on-arduino-leonardo.html) et/ou étudier le code `PWM.ino` dans le dossier `Arduino` qui permet de générer des signaux PWM sur les pins D9, D10, D11 du microcontrôleur.
+* `MyOwnPWM.ino` exploitant les capacités matérielles du microcontrôleur pour générer les PWM. Pour mieux comprendre son fonctionnement, vous pouvez consulter [ce lien](http://r6500.blogspot.ca/2014/12/fast-pwm-on-arduino-leonardo.html) et/ou étudier le code `PWM.ino` dans le dossier `Arduino` qui permet de générer des signaux PWM sur les pins D9, D10, D11 de l'*AVR-T32U4*.
 
 Par défaut, ces codes permettent de commander les servomoteurs via une communication unidirectionnelle série de la Raspberry vers le port `Serial0` du microcontrôleur à la vitesse de *9600 baud*.
 
@@ -76,12 +78,12 @@ Les messages à envoyer sont de simples octets répertoriés dans le tableau ci-
 | ----- | ----------------------------------------------- |
 | `#`   | Retour à la position d'origine                  |
 | `@`   | Stopper le mouvement et maintenir la position   |
-| `U`   | Rotation autour du tangage dans le sens positif |
-| `D`   | Rotation autour du tangage dans le sens négatif |
-| `R`   | Rotation autour du lacet dans le sens positif   |
-| `L`   | Rotation autour du lacet dans le sens positif   |
-| `W`   | Rotation autour du roulis dans le sens positif  |
-| `V`   | Rotation autour du roulis dans le sens négatif  |
+| `U`   | Rotation autour de l'axe de tangage dans le sens positif |
+| `D`   | Rotation autour de l'axe de tangage dans le sens négatif |
+| `R`   | Rotation autour de l'axe de lacet dans le sens positif   |
+| `L`   | Rotation autour de l'axe de lacet dans le sens positif   |
+| `W`   | Rotation autour de l'axe de roulis dans le sens positif  |
+| `V`   | Rotation autour de l'axe de roulis dans le sens négatif  |
 
 Il est possible d'envoyer un ordre similtanément aux 3 servomoteurs en transmettant l'octet `#` suivit respectivement des positions angulaires des servomoteurs associé au roulis, au tangage et la vitesse angulaire du servomoteur associé au lacet, en séparant les données par un caractère quelconque : par exemple `#350/-260/40`.
 
