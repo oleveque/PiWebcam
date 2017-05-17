@@ -46,7 +46,7 @@ Le rôle du microcontrôleur est d'assurer le pilotage des 3 servomoteurs. Les d
 
 ![Pin mapping](Ressources/Images/pinMapping.png)
 
-La communication entre la Raspberry et le microcontrôleur peut être assurée par différents types de liaison (I2C, SPI, UART). La liaison série UART à travers le câble USB a été retenue pour 2 raisons principales : sa facilité de mise en oeuvre et la possibilité de flasher l'*AVR-T32U4* à partir de la Raspberry.
+La communication entre la Raspberry et le microcontrôleur peut être assurée par différents types de liaison (I2C, SPI, UART). La liaison série à travers une connection USB a été retenue pour 2 raisons principales : sa facilité de mise en oeuvre et la possibilité de flasher l'*AVR-T32U4* à partir de la Raspberry.
 
 ### Raspberry Pi 3 + PiCamera
 La *Raspberry Pi 3* hébergera le serveur à partir duquel l'utilisateur devra se connecter pour piloter le système et visualiser le flux vidéo de la *PiCamera v2.1* (cette caméra a une résolution de 8 mégapixels permettant la mise en oeuvre d'un zoom numérique).
@@ -68,7 +68,7 @@ Deux codes vous sont proposés :
 * `ArduinoPWM.ino` utilisant la blibliothèque *Servo* d'Arduino pour générer la PWM de commande des servomoteurs ;
 * `MyOwnPWM.ino` exploitant les capacités hardwares du microcontrôleur pour générer les PWM. Pour mieux comprendre son fonctionnement, vous pouvez consulter [ce lien](http://r6500.blogspot.ca/2014/12/fast-pwm-on-arduino-leonardo.html) et/ou étudier le code `PWM.ino` dans le dossier `Arduino` qui permet de générer des signaux PWM sur les pins D9, D10, D11 du microcontrôleur.
 
-Par défaut, ces codes permettent de commander les servomoteurs via une communication unidirectionnelle série UART vers le port série `Serial0` du microcontrôleur à la vitesse de *9600 baud*.
+Par défaut, ces codes permettent de commander les servomoteurs via une communication unidirectionnelle série de la Raspberry vers le port `Serial0` du microcontrôleur à la vitesse de *9600 baud*.
 
 Les messages à envoyer sont de simples octets répertoriés dans le tableau ci-dessous.
 
